@@ -11,7 +11,7 @@ A Coding Agent skill for writing Chinese textbook chapters: fixed TOC as the sol
 
 ## 中文
 
-一套教材章节编写工作流：以**目录框架为唯一大纲**，复刻样章排版风格，按节并行调研权威来源，以教材语体撰写概念论述与案例，为每一处数据事实配「文内 [N] + 文尾参考文章」引用，将全部引用来源下载清洗为本地纯文本存档，最终同时交付**带引用版**与**无引用提交版**两个 docx。
+一套教材章节编写工作流：以**目录框架为唯一大纲**，复刻样章排版风格，按节并行调研权威来源，以教材语体撰写概念论述与案例，为每一处数据事实配「文内 [N] + 文尾参考资料」引用，将全部引用来源下载清洗为本地纯文本存档，最终同时交付**带引用版**与**无引用提交版**两个 docx。
 
 ### 实战成果
 
@@ -24,11 +24,18 @@ A Coding Agent skill for writing Chinese textbook chapters: fixed TOC as the sol
 - **引用工程化**：引用不是写完再补的点缀，而是从撰写打点、下载存档、编号重排、双向核验到链接终检的一条流水线，每一步都有对应脚本。
 - **双版本交付**：带引用版留档核验、无引用版对外提交，一行命令派生，永不手工删引用。
 
+### 核心优势：全程事实锚定，把幻觉挡在生成阶段
+
+- **先调研、后动笔，没有来源的句子不进文稿**：正文每个数据点都来自调研阶段实际打开的网页，而非模型记忆；撰写时当场在数据处打引用标记 ⟦n⟧，事实与来源同生同灭。
+- **找不到权威出处，宁可不写**：无法核实的「流传数字」直接舍弃或改写表述；口径不一致时注明「据 XX 测算」，绝不替数字「圆梦」。
+- **每条引用都有本地存档，可逐条回查真伪**：引用来源全量下载清洗为本地 txt，并用「关键事实词」逐份校验——来源里没有这个数，当场拦下，引错来源、张冠李戴无处藏身。
+- **三重机器核验 + 人工验收闭环**：引用双向核验（文中↔文尾一一对应）、覆盖核查（反向扫描「该有引用而没有」的段落）、链接终检（URL 是否仍能打开到正确页面）全部由脚本强制执行，最后由人在 Word/WPS 中实际打开验收。
+
 ### 硬性约束（也是亮点）
 
 - **目录框架即唯一大纲**：框架列了什么就写什么，不多写不少写——只列了案例的节绝不自行补写概念小节；未列任何内容的节按教材常规写概念论述。对框架理解有疑义时，先书面汇报理解、经确认后再动笔。
 - **每个数据必有引用，找不到权威出处宁可不写**：来源优先级为 gov.cn 各部门 > 新华社/人民网/央视 > 官方机构（信通院/CNNIC/赛迪）> 公司官网 > 权威财经媒体；自媒体与券商研报数字慎用，口径差异必须在文中注明（「据 XX 测算」）。
-- **引用形态零脆弱性**：文内 [N] + 文尾「参考文章」为纯文本，**无任何 Word 域机制**——永不丢失、经 Word/WPS 再保存不变形、编号想怎么排怎么排（真实尾注方案因 OOXML 机制太脆弱已弃用，仅留档参考）。
+- **引用形态零脆弱性**：文内 [N] + 文尾「参考资料」为纯文本，**无任何 Word 域机制**——永不丢失、经 Word/WPS 再保存不变形、编号想怎么排怎么排（真实尾注方案因 OOXML 机制太脆弱已弃用，仅留档参考）。
 - **双向核验 + 覆盖核查**：文中↔文尾一一对应、首次出现序列严格 1..N、孤儿条目必删；并反向扫描「该有引用而没有」的段落——双向核验管不了这一维，本项目两处整段零引用都靠这步才暴露。
 - **来源全量本地存档**：每条引用对应一份清洗后的纯文本 txt（GBK 老站自动转码、两级页脚规则、JS 空壳预警），并用「关键事实词」逐份校验命中、核验首行 URL 与正文一致。
 - **交付前链接终检**：全部 URL 并发测试，识别软 404 / JS 空壳 / CDN 与 WAF 造成的假阴性；确认死链按「官方原始页 > 官方镜像 > 权威转载」换源，文档条目、存档首行、引用清单三处同步更新。
@@ -48,8 +55,8 @@ Agent 会先向你确认「面向对象 / 目录框架 / 内容要求 / 引用�
 
 | 层级 | 交付物 | 说明 |
 |---|---|---|
-| **最终** | 带引用版章节 docx | 复刻样章排版（样式、字号、案例体例、思考题形式）；文内 [N] + 文尾「参考文章」，留档核验用 |
-| **最终** | 无引用提交版 docx | 由带引用版一键派生（`renumber_refs.py --strip`），全文无残留 [N]、无「参考文章」字样，对外提交用 |
+| **最终** | 带引用版章节 docx | 复刻样章排版（样式、字号、案例体例、思考题形式）；文内 [N] + 文尾「参考资料」，留档核验用 |
+| **最终** | 无引用提交版 docx | 由带引用版一键派生（`renumber_refs.py --strip`），全文无残留 [N]、无「参考资料」字样，对外提交用 |
 | 中间 | 参考资料存档 `N.txt` | 每条引用来源的纯文本清洗版，首行注明原始 URL，关键事实词全部命中 |
 | 中间 | 引用清单 | 编号 ↔ 引文 ↔ 本地文件对照表 |
 | 沉淀 | SKILL.md 更新 | 每次项目的新教训写回 Skill，下次不再踩坑 |
@@ -61,7 +68,7 @@ Agent 会先向你确认「面向对象 / 目录框架 / 内容要求 / 引用�
 | `probe_style.py` | 提取样章样式/字号/字体/案例标题格式 | `python probe_style.py 样章.docx 锚定文字…` |
 | `download_clean.py` | 按「编号 TAB URL」清单下载来源并清洗为纯文本（GBK 转码、两级页脚规则、JS 空壳预警） | `python download_clean.py urls.tsv 输出目录` |
 | `check_archives.py` | 存档核验：关键事实词命中、首行 URL 一致、过薄预警 | `python check_archives.py 存档目录 urls.tsv` |
-| `build_gbt.py` | 以样章为模板生成章节 docx（**标准形式**：文内 [N] + 文尾参考文章，无域机制） | 与同目录 `content.py`（BLOCKS+ENDNOTES）配合，改头部常量后运行 |
+| `build_gbt.py` | 以样章为模板生成章节 docx（**标准形式**：文内 [N] + 文尾参考资料，无域机制） | 与同目录 `content.py`（BLOCKS+ENDNOTES）配合，改头部常量后运行 |
 | `build_docx.py` | ~~真实 Word 尾注版~~（已弃用，仅留档参考：OOXML 尾注机制脆弱） | 同上 |
 | `build_inline.py` | 文内括号注版（仅当明确要求括号注时备选） | 同上 |
 | `renumber_refs.py` | 引用按首次出现顺序重排、删孤儿条目、双向核验、派生无引用版、无引用段落遗漏扫描 | `python renumber_refs.py 章节.docx [-o 输出.docx]`；`--strip 无引用版.docx`；`--check-missing` |
@@ -104,6 +111,13 @@ This skill has been battle-tested in real textbook projects, supporting chapters
 - **Experience compounds instead of leaking**: every rule in SKILL.md is a lesson from a real pitfall — 37 reused archives with mismatched headers, two rework rounds caused by unconfirmed understanding, endnote numbering silently reverted to Roman numerals by Word — each documented with cause and remedy. That is the essential difference between a Skill and verbal instructions.
 - **Citation engineering**: citations are not an afterthought but a pipeline — marking while writing, downloading & archiving, renumbering, bidirectional verification, and a final link check, each step backed by a script.
 - **Dual-version delivery**: the cited version for archiving/verification, the citation-free version for submission — derived with one command, never by hand.
+
+### Core Strength: Fact-Grounded by Construction, Hallucination Blocked at Generation Time
+
+- **Research first, write second — no sentence without a source**: every data point in the text comes from a web page actually opened during the research stage, not from model memory; a citation marker ⟦n⟧ is placed the moment a fact is written, so every fact is born with its source.
+- **No authoritative source, no claim**: unverifiable "circulating numbers" are dropped or rephrased; when sources disagree on statistical caliber, the text explicitly says "per XX's estimate" — the workflow never bends reality to fit a number.
+- **Every citation has a local archive, verifiable line by line**: all cited sources are downloaded and cleaned into local txt files, each checked by keyword hits — if the source does not contain the figure, it is caught on the spot; mismatched or misattributed citations have nowhere to hide.
+- **Triple machine verification + human acceptance**: bidirectional citation verification (text↔list one-to-one), coverage audit (a reverse scan for paragraphs that should cite but don't), and a final link check (does each URL still open the right page) are all enforced by scripts, followed by a human opening the docx in Word/WPS for final acceptance.
 
 ### Hard Constraints (a.k.a. Highlights)
 
