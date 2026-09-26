@@ -50,7 +50,7 @@ def decode_html(raw):
     if m: enc = m.group(1).decode('ascii', 'ignore')
     try: s = raw.decode(enc, 'ignore')
     except LookupError: s = raw.decode('utf-8', 'ignore')
-    if '' in s[:2000]:
+    if '\ufffd' in s[:2000]:
         s = raw.decode('gb18030', 'ignore')
     return s
 
