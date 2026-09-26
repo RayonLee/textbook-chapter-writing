@@ -1,0 +1,6 @@
+__pycache__/
+dl_raw/
+*.raw
+*.bak
+*.docx
+content.py
