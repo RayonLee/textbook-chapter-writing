@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-renumber_refs.py — 文内[N]+文尾"参考文章"式引用的重排与双向核验
+renumber_refs.py — 文内[N]+文尾"参考资料"式引用的重排与双向核验
 
-适用形态: 正文 [1][2] 标注 + 文末"参考文章"节, 条目格式 "[N] 单位：链接"(纯文本, 无 Word 域)。
+适用形态: 正文 [1][2] 标注 + 文末"参考资料"节, 条目格式 "[N] 单位：链接"(纯文本, 无 Word 域)。
 
 两种模式:
   1) 重排模式(默认): 以正文首次出现顺序为基准重编全部引用, 删除正文未出现的孤儿条目,
      双向核验(文中->文尾 / 文尾->文中)后写回。
-       python renumber_refs.py 章节.docx [-o 输出.docx] [--ref-heading 参考文章]
-  2) 无引用版(--strip): 另存副本, 正文 [N] 标记全部删除, "参考文章"整节删除, 原文件不动。
+       python renumber_refs.py 章节.docx [-o 输出.docx] [--ref-heading 参考资料]
+  2) 无引用版(--strip): 另存副本, 正文 [N] 标记全部删除, "参考资料"整节删除, 原文件不动。
        python renumber_refs.py 章节.docx --strip 无引用版.docx
   3) 遗漏扫描(--check-missing, 只读): 列出正文不含[N]的段落并按信号词排可疑度,
      供人工判断哪些段落该有引用而没有(双向核验管不了这一维)。
@@ -146,7 +146,7 @@ def strip_citations(src, dst, ref_heading):
     left = [ptext(p) for p in tree2.findall('.//' + q('p')) if CITE.search(ptext(p))]
     assert not left, f'仍有残留[N]: {left[:3]}'
     assert not any(ref_heading in ptext(p) for p in tree2.findall('.//' + q('p')))
-    print(f'已生成无引用版: 删除正文标记 {n_marks} 处, 参考文章节 {n_paras} 段, 无残留')
+    print(f'已生成无引用版: 删除正文标记 {n_marks} 处, 参考资料节 {n_paras} 段, 无残留')
 
 def write_back(z, tree, dst):
     new_xml = etree.tostring(tree, xml_declaration=True, encoding='UTF-8', standalone=True)
@@ -200,7 +200,7 @@ if __name__ == '__main__':
     if not args:
         sys.exit(__doc__)
     src = args[0]
-    ref_heading = '参考文章'
+    ref_heading = '参考资料'
     if '--ref-heading' in args:
         i = args.index('--ref-heading'); ref_heading = args[i + 1]
     if '--strip' in args:

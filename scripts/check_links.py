@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-check_links.py — 交付前终检: 批量测试文档"参考文章"全部URL能否打开到正确网页
-用法: python check_links.py 章节.docx [--ref-heading 参考文章]
+check_links.py — 交付前终检: 批量测试文档"参考资料"全部URL能否打开到正确网页
+用法: python check_links.py 章节.docx [--ref-heading 参考资料]
 
 判定规则(踩坑记录):
   * 软404: HTTP 200 但标题含"404/不存在/出错"——真死链(本项目: 搜狐转载页当天被删)。
@@ -83,7 +83,7 @@ def test(item):
 
 def main():
     docx = sys.argv[1]
-    ref_heading = '参考文章'
+    ref_heading = '参考资料'
     if '--ref-heading' in sys.argv:
         ref_heading = sys.argv[sys.argv.index('--ref-heading') + 1]
     urls = extract_urls(docx, ref_heading)

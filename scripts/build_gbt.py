@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-build_gbt.py — 以样章为模板生成教材章节 docx（标准形式：文内[N] + 文尾"参考文章"）
+build_gbt.py — 以样章为模板生成教材章节 docx（标准形式：文内[N] + 文尾"参考资料"）
 
 引用形式（本项目最终交付形态，尾注/脚注方案已弃用）：
   正文引用标记直接写成纯文本 [n]（无任何 Word 域机制，永不丢失、经 Word/WPS 再保存不变形）；
-  文末追加"参考文章"节，每行一条 "[N] 单位：链接"。
+  文末追加"参考资料"节，每行一条 "[N] 单位：链接"。
 
 与 content.py 配合（写法同 build_docx.py 头部注释）：
   BLOCKS   = [(段落类型, 文本), ...]；正文中用 ⟦n⟧ 标引用位（撰写时按首次出现顺序编号）
@@ -116,12 +116,12 @@ for kind, text in BLOCKS:
         add_par(PPR_BASE + '<w:ind w:firstLineChars="200"/>',
                 text_runs(text, SONG + '<w:sz w:val="24"/><w:szCs w:val="24"/>'))
 
-# —— 文尾"参考文章"节 ——
+# —— 文尾"参考资料"节 ——
 REF_RPR = SONG + '<w:sz w:val="21"/><w:szCs w:val="21"/>'
 add_par(PPR_BASE, '')
 add_par(PPR_BASE + '<w:ind w:firstLineChars="200"/>',
         f'<w:r><w:rPr>{SONG}<w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/></w:rPr>'
-        f'<w:t xml:space="preserve">参考文章</w:t></w:r>')
+        f'<w:t xml:space="preserve">参考资料</w:t></w:r>')
 used = []
 for kind, text in BLOCKS:
     for m in re.finditer(r'⟦(\d+)⟧', text):
@@ -138,6 +138,6 @@ if sectPr is not None:
 
 doc.save(OUT)
 print('saved:', OUT)
-print(f'参考文章 {len(used)} 条。下一步必做:')
+print(f'参考资料 {len(used)} 条。下一步必做:')
 print(f'  python renumber_refs.py "{OUT}"            # 重排+双向核验')
 print(f'  python renumber_refs.py "{OUT}" --strip 无引用提交版.docx')
