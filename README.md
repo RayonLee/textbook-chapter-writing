@@ -15,8 +15,7 @@ A Coding Agent skill for writing Chinese textbook chapters: fixed TOC as the sol
 
 ### 实战成果
 
-本 Skill 已在真实教材编写项目中全程跑通，支撑完成两本畅销教材的章节撰写。以《数字经济与数字化转型》第十一章为例，单次交付：概念论述 2 节 + 案例 8 个，约 1.8 万字，89 条引用全部双向核验通过，89 份来源全部本地存档并可逐条回查。
-
+本 Skill 已在真实教材编写项目中全程跑通，支撑完成两本畅销教材的章节撰写。
 ### 设计思路
 
 - **人定框架、AI 交付、人来验收**：目录框架由编写者给定，Agent 负责调研、撰写、配引、存档、排版与自检，人只做理解确认与最终验收；验收满意的流程随即固化为 Skill。
@@ -103,7 +102,7 @@ A complete workflow for writing Chinese textbook chapters: the **given table of 
 
 ### Proven in Real Projects
 
-This skill has been battle-tested in real textbook projects, supporting chapters of two published-book projects: ***Introduction to the Digital Economy* (《数字经济概论》)** and ***Digital Economy and Digital Transformation* (《数字经济与数字化转型》)**. For Chapter 11 of the latter, a single delivery covered 2 concept sections + 8 cases, ~18,000 Chinese characters, with 89 citations passing bidirectional verification and 89 sources archived locally for traceability.
+This skill has been battle-tested in real textbook projects, supporting chapters of two published-book projects. 
 
 ### Design Philosophy
 
